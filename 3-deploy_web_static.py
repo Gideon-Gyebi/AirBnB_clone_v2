@@ -1,5 +1,7 @@
 #!/usr/bin/python3
-# Fabfile to create and distribute an archive to a web server.
+"""Fabric script that distributes an archive to your web servers
+(based on the file 2-do_deploy_web_static.py)
+"""
 import os.path
 from datetime import datetime
 from fabric.api import env
