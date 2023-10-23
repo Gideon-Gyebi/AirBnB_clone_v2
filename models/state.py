@@ -13,9 +13,21 @@ class State(BaseModel, Base):
     __tablename__ = 'states'  # Name of the database table
     name = Column(String(128), nullable=False)
 
-    # Define the relationship between State and City
-    state = relationship("City", backref="state",
-                                cascade="delete")
+    if getenv("HBNB TYPE STORAGE") == "db":
+        cities = relationship("City", backref="state", cascade="all, delete")
+    else:
+        @property
+        def cities(self):
+            """gettering for list of city instances related to the state"""
+            city_list = []
+            all_cities = models.storage.all(City)
+            for city in all_cities.values():
+                if city.state_id == self.id:
+                    city_list.append(city)
+            return city_list
+
+    """ Define the relationship between State and City
+    state = relationship("City", backref="state", cascade="delete")
 
     @property
     def cities(self):
@@ -34,4 +46,4 @@ class State(BaseModel, Base):
             if city.state_id == self.id:
                 filtered_cities.append(city)
 
-        return filtered_cities
+        return filtered_cities"""
